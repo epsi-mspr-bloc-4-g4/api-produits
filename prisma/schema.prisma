@@ -12,9 +12,6 @@ model Product {
     createdAt   DateTime @map("created_at")
     name        String   @db.VarChar(255)
     stock       Int
-    price       String   @db.VarChar(10)
-    description String   @db.Text
-    color       String   @db.VarChar(50)
     detailId    Int      @map("detail_id")
 
     details Detail @relation(fields: [detailId], references: [id])
