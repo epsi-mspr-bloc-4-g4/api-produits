@@ -35,7 +35,7 @@ productRouter.post("/api/products", async (req: Request, res: Response) => {
 // Get all products
 productRouter.get("/api/products", async (req: Request, res: Response) => {
   try {
-    const customers = await prisma.product.findMany({
+    const products = await prisma.product.findMany({
       select: {
         id: true,
         createdAt: true,
@@ -51,7 +51,7 @@ productRouter.get("/api/products", async (req: Request, res: Response) => {
       },
     });
 
-    res.json(customers);
+    res.json(products);
   } catch (error) {
     res.status(500).json({ error: "Something went wrong" });
   }
