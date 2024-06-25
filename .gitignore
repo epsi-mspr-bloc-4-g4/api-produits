@@ -38,6 +38,7 @@ typings/
 lib/*.js
 test/*.js
 *.map
-.env
 
-prisma/migrations/
+.env
+.vscode
+.idea
