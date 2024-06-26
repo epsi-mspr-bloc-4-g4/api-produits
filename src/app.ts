@@ -26,24 +26,16 @@ app.use(errorHandler);
 
 app.use("/", productRouter);
 
-app.use((req, res) => {
-  res.status(404).send({ message: "Bad request" });
-});
-
 app.post('/publish', async (req, res) => {
   const { topic, message } = req.body;
   await produceMessage(topic, message);
   res.send('Message published');
 });
 
-app.listen(PORT, async () => {
-  console.log(`Server is running on port ${PORT}`);
-  await consumeMessages('example_topic');
-});
-
-if (process.env.NODE_ENV !== "test") {
-  app.listen(PORT, () => {
+if (process.env.NODE_ENV !== "test")   {
+  app.listen(PORT, async () => {
     console.log(`Server is listening on port ${PORT}`);
+    await consumeMessages('example_topic');
   });
 }
 
