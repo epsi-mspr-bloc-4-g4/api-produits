@@ -4,6 +4,8 @@ import cors from "cors";
 import helmet from "helmet";
 import productRouter from "./routes/product.routes";
 import { errorHandler } from "./middlewares/errorHandler";
+import {produceMessage} from "../kafka/producer";
+import {consumeMessages} from "../kafka/consumer";
 
 dotevnv.config();
 
@@ -26,6 +28,17 @@ app.use("/", productRouter);
 
 app.use((req, res) => {
   res.status(404).send({ message: "Bad request" });
+});
+
+app.post('/publish', async (req, res) => {
+  const { topic, message } = req.body;
+  await produceMessage(topic, message);
+  res.send('Message published');
+});
+
+app.listen(PORT, async () => {
+  console.log(`Server is running on port ${PORT}`);
+  await consumeMessages('example_topic');
 });
 
 if (process.env.NODE_ENV !== "test") {

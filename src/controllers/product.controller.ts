@@ -24,9 +24,11 @@ export const createProduct = async (req: Request, res: Response) => {
         name,
         stock,
         detailId: newDetail.id,
-      },
-      include: {
-        details: true,
+        details: {
+          connect: {
+            id: newDetail.id,
+          }
+        }
       },
     });
 
