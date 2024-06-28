@@ -3,8 +3,6 @@ import * as dotevnv from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
 import productRouter from "./routes/product.routes";
-import {produceMessage} from "../kafka/producer";
-import {consumeMessages} from "../kafka/consumer";
 
 dotevnv.config();
 
@@ -23,16 +21,9 @@ app.use(helmet());
 
 app.use("/", productRouter);
 
-app.post('/publish', async (req, res) => {
-  const { topic, message } = req.body;
-  await produceMessage(topic, message);
-  res.send('Message published');
-});
-
 if (process.env.NODE_ENV !== "test")   {
   app.listen(PORT, async () => {
     console.log(`Server is listening on port ${PORT}`);
-    await consumeMessages('products');
   });
 }
 

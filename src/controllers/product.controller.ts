@@ -1,36 +1,32 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
+import { produceMessage } from "../../kafka/producer";
 
 const prisma = new PrismaClient();
 
 // Création d'un nouveau produit
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    const { name, stock, details } = req.body;
+    const { name, stock, price, description, color } = req.body;
 
-    // First, create a Detail
-    const newDetail = await prisma.detail.create({
-      data: {
-        price: details.price,
-        description: details.description,
-        color: details.color,
-      },
-    });
 
     // Then, create a Product with the id of the new Detail
     const newProduct = await prisma.product.create({
       data: {
         createdAt: new Date(),
-        name,
-        stock,
-        detailId: newDetail.id,
+        name: name,
+        stock: stock,
+        details: {
+             create:{
+                price: price,
+                description:description,
+                color: color
+                }
+          }
         },
-        include: {
-          details: true,
-      },
     });
 
-    res.json(newProduct);
+    res.json("Votre produit avec l'id" + + newProduct.id + "a bien été créé ");
   } catch (error) {
     res.status(500).json({ error: `Something went wrong: ${error}` });
   }
@@ -44,6 +40,8 @@ export const getAllProducts = async (req: Request, res: Response) => {
         details: true,
       },
     });
+    await produceMessage("order-products-fetch", products);
+    console.log(produceMessage("order-products-fetch", products))
     res.json(products);
   } catch (error) {
     res.status(500).json({ error: "Something went wrong" });
