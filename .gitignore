@@ -42,3 +42,6 @@ test/*.js
 .env
 .vscode
 .idea
+
+prisma/generated
+prisma/migrations
