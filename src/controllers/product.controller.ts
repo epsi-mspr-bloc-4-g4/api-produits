@@ -128,16 +128,36 @@ export const getProductById = async (req: Request, res: Response) => {
 // Mise à jour d'un produit
 export const updateProduct = async (req: Request, res: Response) => {
   try {
-    const product = await prisma.product.update({
+    const product: InputProductWithDetail = req.body;
+
+    await prisma.product.update({
       where: { id: Number(req.params.id) },
-      data: req.body,
+      data: {
+        name: product.name,
+        stock: product.stock,
+        details: {
+          update: {
+            price: product.price,
+            description: product.description,
+            color: product.color,
+          },
+        },
+      },
+    });
+
+    const productsToKafka = await prisma.product.findMany({
       include: {
         details: true,
       },
     });
+
+    if (productsToKafka.length > 0) {
+      await produceMessage("order-products-fetch", productsToKafka);
+    }
+
     res.json(product);
   } catch (error) {
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: "Something went wrong " + error });
   }
 };
 
@@ -147,6 +167,17 @@ export const deleteProduct = async (req: Request, res: Response) => {
     const product = await prisma.product.delete({
       where: { id: Number(req.params.id) },
     });
+
+    const productsToKafka = await prisma.product.findMany({
+      include: {
+        details: true,
+      },
+    });
+
+    if (productsToKafka.length > 0) {
+      await produceMessage("order-products-fetch", productsToKafka);
+    }
+
     res.json("Votre produit " + product.name + " a été supprimé avec succès !");
   } catch (error) {
     res.status(500).json({ error: "Something went wrong" });
