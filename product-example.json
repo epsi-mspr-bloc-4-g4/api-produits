@@ -1,0 +1,107 @@
+[
+  {
+    "name": "Colombian Supremo",
+    "price": "18",
+    "description": "Smooth and well-balanced with a nutty flavor",
+    "color": "medium brown",
+    "stock": 120
+  },
+  {
+    "name": "Ethiopian Yirgacheffe",
+    "price": "22",
+    "description": "Bright acidity with floral and citrus notes",
+    "color": "light brown",
+    "stock": 95
+  },
+  {
+    "name": "Sumatra Mandheling",
+    "price": "20",
+    "description": "Full-bodied with earthy and chocolate undertones",
+    "color": "dark brown",
+    "stock": 150
+  },
+  {
+    "name": "Guatemalan Antigua",
+    "price": "19",
+    "description": "Rich flavor with a hint of cocoa and spice",
+    "color": "medium brown",
+    "stock": 200
+  },
+  {
+    "name": "Costa Rican Tarrazu",
+    "price": "21",
+    "description": "Bright and clean with a hint of citrus",
+    "color": "light brown",
+    "stock": 75
+  },
+  {
+    "name": "Brazilian Santos",
+    "price": "17",
+    "description": "Mild and smooth with a slight sweetness",
+    "color": "medium brown",
+    "stock": 110
+  },
+  {
+    "name": "Kenya AA",
+    "price": "24",
+    "description": "Full-bodied with a winey acidity and fruity notes",
+    "color": "dark brown",
+    "stock": 130
+  },
+  {
+    "name": "Jamaican Blue Mountain",
+    "price": "50",
+    "description": "Mild and sweet with excellent balance",
+    "color": "light brown",
+    "stock": 40
+  },
+  {
+    "name": "Hawaiian Kona",
+    "price": "45",
+    "description": "Smooth and rich with a hint of spice",
+    "color": "medium brown",
+    "stock": 65
+  },
+  {
+    "name": "Panama Geisha",
+    "price": "60",
+    "description": "Delicate and complex with floral and jasmine notes",
+    "color": "light brown",
+    "stock": 30
+  },
+  {
+    "name": "Tanzanian Peaberry",
+    "price": "23",
+    "description": "Bright and lively with a citrusy flavor",
+    "color": "medium brown",
+    "stock": 80
+  },
+  {
+    "name": "Peruvian Organic",
+    "price": "18",
+    "description": "Smooth and mild with a hint of sweetness",
+    "color": "medium brown",
+    "stock": 90
+  },
+  {
+    "name": "Rwandan Bourbon",
+    "price": "25",
+    "description": "Rich and creamy with berry undertones",
+    "color": "dark brown",
+    "stock": 60
+  },
+  {
+    "name": "Indian Monsooned Malabar",
+    "price": "20",
+    "description": "Smooth and mellow with a unique earthy flavor",
+    "color": "dark brown",
+    "stock": 85
+  },
+  {
+    "name": "Yemen Mocha",
+    "price": "35",
+    "description": "Rich and complex with hints of chocolate and spice",
+    "color": "dark brown",
+    "stock": 50
+  }
+]
