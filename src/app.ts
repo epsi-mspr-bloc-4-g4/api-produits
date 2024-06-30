@@ -3,7 +3,6 @@ import * as dotevnv from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
 import productRouter from "./routes/product.routes";
-import { errorHandler } from "./middlewares/errorHandler";
 
 dotevnv.config();
 
@@ -20,16 +19,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(helmet());
 
-app.use(errorHandler);
-
 app.use("/", productRouter);
 
-app.use((req, res) => {
-  res.status(404).send({ message: "Bad request" });
-});
-
-if (process.env.NODE_ENV !== "test") {
-  app.listen(PORT, () => {
+if (process.env.NODE_ENV !== "test")   {
+  app.listen(PORT, async () => {
     console.log(`Server is listening on port ${PORT}`);
   });
 }
