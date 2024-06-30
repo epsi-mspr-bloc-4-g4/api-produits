@@ -5,7 +5,6 @@ on:
     branches:
       - main
 
-
 jobs:
   build-and-test:
     name: Build and Test
@@ -42,9 +41,14 @@ jobs:
             sleep 1
           done
 
-          # Generate and apply migrations
-          npx prisma generate
-          npx prisma migrate dev --name init
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Apply Prisma Migrations
+        run: npx prisma migrate dev --name init
+
+      - name: Verify Prisma Client
+        run: ls -l prisma/generated/client
 
       - name: Run tests
         run: npm test
@@ -54,12 +58,6 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-      # If you wish to fail your job when the Quality Gate is red, uncomment the
-      # following lines. This would typically be used to fail a deployment.
-      # - uses: sonarsource/sonarqube-quality-gate-action@master
-      #   timeout-minutes: 5
-      #   env:
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Log in to the GitHub Container Registry
         uses: docker/login-action@v3
