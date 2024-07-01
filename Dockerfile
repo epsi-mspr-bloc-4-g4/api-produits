@@ -23,7 +23,8 @@ RUN npm ci --only=production
 
 COPY --from=build /app/dist ./dist
 
-RUN chmod +x /entrypoint.sh
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 
 # Set the entrypoint to the entrypoint script
 ENTRYPOINT ["/app/entrypoint.sh"]
