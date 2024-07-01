@@ -7,4 +7,4 @@ npx prisma generate
 npx prisma migrate deploy
 
 # Start the application
-exec node src/app.ts
+exec node dist/app.ts
