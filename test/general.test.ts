@@ -4,7 +4,12 @@ import { produceMessage } from "../src/kafka/producer";
 
 // Mock produceMessage
 jest.mock("../src/kafka/producer", () => ({
-  produceMessage: jest.fn(),
+  produceMessage: jest.fn((topic, message) => {
+    console.log(
+      `Mocked: produceMessage called with topic "${topic}" and message:`,
+      message
+    );
+  }),
 }));
 describe("Product API Tests", () => {
   let createdProductId: number;
@@ -26,7 +31,7 @@ describe("Product API Tests", () => {
     expect(response.body).toContain("bien");
     createdProductId = parseInt(response.body.split(" ")[4]);
 
-    expect(produceMessage).not.toHaveBeenCalled();
+    expect(produceMessage).toHaveBeenCalled();
   });
 
   it("should retrieve a product by id", async () => {
