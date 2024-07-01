@@ -1,3 +1,5 @@
+import './../instrument.js';
+import * as Sentry from "@sentry/node";
 import express from "express";
 import * as dotevnv from "dotenv";
 import cors from "cors";
@@ -13,6 +15,12 @@ if (!process.env.PORT) {
 const PORT = parseInt(process.env.PORT as string, 10);
 
 const app = express();
+
+Sentry.setupExpressErrorHandler(app);
+
+app.get("/debug-sentry", function mainHandler(req, res) {
+  throw new Error("My first Sentry error!");
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
