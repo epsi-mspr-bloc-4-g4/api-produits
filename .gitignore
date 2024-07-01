@@ -45,3 +45,5 @@ test/*.js
 
 prisma/generated
 prisma/migrations
+
+package-lock.json
