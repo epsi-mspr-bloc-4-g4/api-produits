@@ -47,3 +47,5 @@ prisma/generated
 prisma/migrations
 
 package-lock.json
+
+dist/
