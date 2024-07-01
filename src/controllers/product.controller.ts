@@ -1,17 +1,23 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import { produceMessage } from "../../kafka/producer";
-import type {
-  Product,
-  Detail,
-} from "../../prisma/generated/client/prisma-client-js/index";
+// import type {
+//   Product,
+//   Detail,
+// } from "../../prisma/generated/client/prisma-client-js/index";
 const prisma = new PrismaClient();
 
-type InputProduct = Omit<Product, "id" | "createdAt" | "details" | "detailId">;
-type InputDetail = Omit<Detail, "id">;
+// type InputProduct = Omit<Any, "id" | "createdAt" | "details" | "detailId">;
+// type InputDetail = Omit<Any, "id">;
 
-type InputProductWithDetail = InputProduct & InputDetail;
-
+// type InputProductWithDetail = InputProduct & InputDetail;
+type InputProductWithDetail = {
+  name: string;
+  stock: number;
+  price: string;
+  description: string;
+  color: string;
+};
 // Création d'un nouveau produit
 export const createProduct = async (req: Request, res: Response) => {
   try {
