@@ -1,16 +1,9 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import { produceMessage } from "../../kafka/producer";
-// import type {
-//   Product,
-//   Detail,
-// } from "../../prisma/generated/client/prisma-client-js/index";
+
 const prisma = new PrismaClient();
 
-// type InputProduct = Omit<Any, "id" | "createdAt" | "details" | "detailId">;
-// type InputDetail = Omit<Any, "id">;
-
-// type InputProductWithDetail = InputProduct & InputDetail;
 type InputProductWithDetail = {
   name: string;
   stock: number;

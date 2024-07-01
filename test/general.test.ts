@@ -19,7 +19,6 @@ describe("Product API Tests", () => {
       .expect(200);
 
     expect(response.body).toContain("bien");
-    console.log(response.body.split(" "));
     createdProductId = parseInt(response.body.split(" ")[4]);
   });
 
@@ -30,8 +29,8 @@ describe("Product API Tests", () => {
 
     expect(response.body).toHaveProperty("name", newProduct.name);
     expect(response.body).toHaveProperty("stock", newProduct.stock);
-    // expect(response.body).toHaveProperty("price", newProduct.price);
-    // expect(response.body).toHaveProperty("description", newProduct.description);
-    // expect(response.body).toHaveProperty("color", newProduct.color);
+    expect(response.body).toHaveProperty("price", newProduct.price);
+    expect(response.body).toHaveProperty("description", newProduct.description);
+    expect(response.body).toHaveProperty("color", newProduct.color);
   });
 });
