@@ -1,5 +1,5 @@
 // Import with `import * as Sentry from "@sentry/node"` if you are using ESM
-const Sentry = require("@sentry/node");
+import * as Sentry from "@sentry/node";
 const { nodeProfilingIntegration } = require("@sentry/profiling-node");
 
 Sentry.init({
@@ -13,8 +13,6 @@ Sentry.init({
     // Set sampling rate for profiling - this is relative to tracesSampleRate
     profilesSampleRate: 1.0,
 });
-
-import * as Sentry from "@sentry/node";
 import express from "express";
 import * as dotevnv from "dotenv";
 import cors from "cors";
