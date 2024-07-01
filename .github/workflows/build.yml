@@ -11,8 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     env: 
       DATABASE_URL: postgresql://postgres:123@localhost:5433/epsi_product?schema=public
-      KAFKA_SERVER: 82.66.231.166:39092
-      PORT: 7000
     services:
       postgres:
         image: postgres:latest
@@ -66,17 +64,17 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-      # - name: Log in to the GitHub Container Registry
-      #   uses: docker/login-action@v3
-      #   with:
-      #     registry: ghcr.io
-      #     username: ${{ github.repository_owner }}
-      #     password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Log in to the GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Build and push Docker image
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     context: .
-      #     file: ./Dockerfile
-      #     push: true
-      #     tags: ghcr.io/${{ github.repository }}/api-produits:latest
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ghcr.io/${{ github.repository }}/api-produits:latest
