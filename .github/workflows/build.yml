@@ -43,19 +43,13 @@ jobs:
             sleep 1
           done
 
-      # - name: Generate Prisma Client
-      #   run: npx prisma generate
+      - name: Generate Prisma Client
+        run: npx prisma generate
 
-      # - name: Apply Prisma Migrations
-      #   run: npx prisma migrate dev --name init
-      - name: Run Prisma
-        run: npx prisma db push
-
-      # - name: Verify Prisma Client
-      #   run: ls -l prisma/generated/client
-
-      # - name: Wait 10 seconds
-      #   run: sleep 10
+      - name: Apply Prisma Migrations
+        run: npx prisma migrate dev --name init
+      # - name: Run Prisma
+      #   run: npx prisma db push
 
       - name: Run tests
         run: npm test
