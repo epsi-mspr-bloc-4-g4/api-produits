@@ -23,6 +23,8 @@ RUN npm ci --only=production
 
 COPY --from=build /app/dist ./dist
 
+COPY prisma/schema.prisma /app/prisma/schema.prisma
+
 COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
