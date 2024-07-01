@@ -1,4 +1,4 @@
-import './instrument.js';
+import './instrument.ts';
 import * as Sentry from "@sentry/node";
 import express from "express";
 import * as dotevnv from "dotenv";
