@@ -26,9 +26,7 @@ describe("Product API Tests", () => {
     expect(response.body).toContain("bien");
     createdProductId = parseInt(response.body.split(" ")[4]);
 
-    it("should not call produceMessage", () => {
-      expect(produceMessage).not.toHaveBeenCalled();
-    });
+    expect(produceMessage).not.toHaveBeenCalled();
   });
 
   it("should retrieve a product by id", async () => {
