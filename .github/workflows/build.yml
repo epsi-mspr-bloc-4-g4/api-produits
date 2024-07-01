@@ -53,6 +53,9 @@ jobs:
       - name: Verify Prisma Client
         run: ls -l prisma/generated/client
 
+      - name: Wait 10 seconds
+        run: sleep 10
+        
       - name: Run tests
         run: npm test
 
