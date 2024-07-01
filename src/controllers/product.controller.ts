@@ -59,30 +59,32 @@ export const createProducts = async (req: Request, res: Response) => {
   try {
     const products: InputProductWithDetail[] = req.body;
 
-    const createManyProducts = products.map((product) => {
-      return prisma.product.create({
-        data: {
-          createdAt: new Date(),
-          name: product.name,
-          stock: product.stock,
-          details: {
-            create: {
-              price: product.price,
-              description: product.description,
-              color: product.color,
+    await prisma.$transaction(
+      products.map((product) => {
+        return prisma.product.create({
+          data: {
+            createdAt: new Date(),
+            name: product.name,
+            stock: product.stock,
+            details: {
+              create: {
+                price: product.price,
+                description: product.description,
+                color: product.color,
+              },
             },
           },
-        },
-      });
-    });
-
-    Promise.all(createManyProducts);
+        });
+      })
+    );
 
     const productsToKafka = await prisma.product.findMany({
       include: {
         details: true,
       },
     });
+
+    Promise.all(productsToKafka);
 
     if (productsToKafka.length > 0) {
       await produceMessage("order-products-fetch", productsToKafka);
