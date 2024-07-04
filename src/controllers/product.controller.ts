@@ -5,6 +5,7 @@ import { produceMessage } from "../kafka/producer";
 const prisma = new PrismaClient();
 
 type InputProductWithDetail = {
+  id?: number;
   name: string;
   stock: number;
   price: string;
@@ -18,6 +19,16 @@ export const createProduct = async (req: Request, res: Response) => {
       req.body;
 
     // Then, create a Product with the id of the new Detail
+    const existingProduct = await prisma.product.findFirst({
+      where: { name: name },
+    });
+
+    if (existingProduct) {
+      return res
+        .status(400)
+        .json({ error: "Ce produit avec ce nom existe déjà." });
+    }
+
     const newProduct = await prisma.product.create({
       data: {
         createdAt: new Date(),
@@ -57,26 +68,133 @@ export const createProduct = async (req: Request, res: Response) => {
 // Création de plusieurs produits
 export const createProducts = async (req: Request, res: Response) => {
   try {
-    const products: InputProductWithDetail[] = req.body;
+    const reqProducts: InputProductWithDetail[] = req.body;
+
+    const reqProductsIds = reqProducts.filter((reqProduct) => reqProduct.id);
+    const reqProductsNoIds = reqProducts.filter((reqProduct) => !reqProduct.id);
+
+    const existingProducts = await prisma.product.findMany();
 
     await prisma.$transaction(
-      products.map((product) => {
-        return prisma.product.create({
-          data: {
-            createdAt: new Date(),
-            name: product.name,
-            stock: product.stock,
-            details: {
-              create: {
-                price: product.price,
-                description: product.description,
-                color: product.color,
+      reqProductsNoIds
+        .filter((reqProductNoId) => {
+          const existingProduct = existingProducts.find(
+            (existingProduct) => existingProduct.name === reqProductNoId.name
+          );
+          return !existingProduct;
+        })
+        .map((reqProductNoId) => {
+          return prisma.product.create({
+            data: {
+              createdAt: new Date(),
+              name: reqProductNoId.name,
+              stock: reqProductNoId.stock,
+              details: {
+                create: {
+                  price: reqProductNoId.price,
+                  description: reqProductNoId.description,
+                  color: reqProductNoId.color,
+                },
               },
             },
-          },
-        });
-      })
+          });
+        })
     );
+
+    await prisma.$transaction(
+      reqProductsIds
+        .filter((reqProductId) => {
+          const existingProduct = existingProducts.find(
+            (existingProduct) => existingProduct.id === reqProductId.id
+          );
+          return existingProduct;
+        })
+        .map((reqProductId) => {
+          return prisma.product.update({
+            where: { id: reqProductId.id },
+            data: {
+              stock: reqProductId.stock,
+              details: {
+                update: {
+                  price: reqProductId.price,
+                  description: reqProductId.description,
+                  color: reqProductId.color,
+                },
+              },
+            },
+          });
+        })
+    );
+
+    await prisma.$transaction(
+      reqProductsIds
+        .filter((reqProduct) => {
+          const notExistingProduct = existingProducts.find(
+            (existingProduct) => {
+              existingProduct.id !== reqProduct.id &&
+                existingProduct.name !== reqProduct.name;
+            }
+          );
+          return notExistingProduct;
+        })
+        .map((reqProduct) => {
+          return prisma.product.create({
+            data: {
+              createdAt: new Date(),
+              name: reqProduct.name,
+              stock: reqProduct.stock,
+              details: {
+                create: {
+                  price: reqProduct.price,
+                  description: reqProduct.description,
+                  color: reqProduct.color,
+                },
+              },
+            },
+          });
+        })
+    );
+
+    // await prisma.$transaction(
+    //   reqProducts.map((reqProduct) => {
+    //     const existingProduct = existingProducts.find(
+    //       (existingProduct) =>
+    //         existingProduct.id === reqProduct.id ||
+    //         existingProduct.name === reqProduct.name
+    //     );
+
+    //     if (existingProduct) {
+    //       return prisma.product.update({
+    //         where: { id: existingProduct.id },
+    //         data: {
+    //           stock: reqProduct.stock,
+    //           details: {
+    //             update: {
+    //               price: reqProduct.price,
+    //               description: reqProduct.description,
+    //               color: reqProduct.color,
+    //             },
+    //           },
+    //         },
+    //       });
+    //     }
+
+    //     return prisma.product.create({
+    //       data: {
+    //         createdAt: new Date(),
+    //         name: reqProduct.name,
+    //         stock: reqProduct.stock,
+    //         details: {
+    //           create: {
+    //             price: reqProduct.price,
+    //             description: reqProduct.description,
+    //             color: reqProduct.color,
+    //           },
+    //         },
+    //       },
+    //     });
+    //   })
+    // );
 
     const productsToKafka = await prisma.product.findMany({
       include: {
